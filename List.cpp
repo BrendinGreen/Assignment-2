@@ -18,7 +18,7 @@ using namespace std;
 // Default constructor
 List::List() {
     // Set up element counts and elements array of pointers
-    for (int i = 0; i < 10; i++){
+    for (int i = 0; i < HASH_SIZE; i++){
         this->elementCounts[i] = 0;
         this->capacities[i] = this->MAX_ELEMENTS;
         this->elements[i] = new Patient[this->MAX_ELEMENTS];
@@ -27,7 +27,7 @@ List::List() {
 
 // Deep Copy Constructor
 List::List(const List& listToCopy){
-    for (int i = 0; i < 10; i++){
+    for (int i = 0; i < HASH_SIZE; i++){
         this->elementCounts[i] = listToCopy.elementCounts[i];
         this->capacities[i] = listToCopy.capacities[i];
         this->elements[i] = new Patient[this->capacities[i]];
@@ -40,7 +40,7 @@ List::List(const List& listToCopy){
 
 // Default deconstructor
 List::~List(){
-    for (int i = 0; i < 10; i++){
+    for (int i = 0; i < HASH_SIZE; i++){
         delete [] this->elements[i];
         this->elements[i] = NULL;
     }
@@ -53,7 +53,7 @@ int List::getSection(const Patient& newElement) const {
 // Description: Returns the total element count currently stored in List.
 int  List::getElementCount() const {
     int sum = 0;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < HASH_SIZE; i++) {
         sum += this->elementCounts[i];
     }
     return sum;
@@ -80,6 +80,9 @@ bool List::insert(const Patient& newElement){
     }
     // Insert new element
     for (int j = 0; j < elementCounts[section]; j++) {
+        if (elements[section][j] == newElement) {
+            return false;
+        }
         if (elements[section][j] > newElement) {
             for (int k = elementCounts[section]; k > j; k--){
                 elements[section][k] = elements[section][k-1];
@@ -87,8 +90,6 @@ bool List::insert(const Patient& newElement){
             elements[section][j] = newElement;
             elementCounts[section]++;
             return true;
-        } else if (elements[section][j] == newElement) {
-            return false;
         }
     }
 
@@ -120,7 +121,7 @@ bool List::remove( const Patient& toBeRemoved ){
 
 // Description: Remove all elements.
 void List::removeAll(){
-    for (int i = 0; i < 10; i++){
+    for (int i = 0; i < HASH_SIZE; i++){
         elementCounts[i] = 0;
     }
 }
@@ -141,7 +142,7 @@ Patient* List::search(const Patient& target){
 
 // Description: Prints all n elements stored in List in sort order and does so in O(n).
 void List::printList() {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < HASH_SIZE; i++) {
         for (int j = 0; j < elementCounts[i]; j++) {
             elements[i][j].printPatient();
         }

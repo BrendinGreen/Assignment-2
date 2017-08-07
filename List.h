@@ -18,16 +18,17 @@
 
 using namespace std;
 
-
 class List  {
 
 private:
 // We must complete this section
     static const int MAX_ELEMENTS = 3;
-    int elementCounts[10];
-    int capacities[10];
-    Patient* elements[10];
+	static const int HASH_SIZE = 10;
+    int elementCounts[HASH_SIZE];
+    int capacities[HASH_SIZE];
+    Patient* elements[HASH_SIZE];
 
+	// Hash function
     int getSection(const Patient& newElement) const;
 
 public:
